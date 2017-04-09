@@ -1,4 +1,5 @@
 class JobsController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create, :update, :edit, :destroy]
 
   def index
     @jobs = Job.all
@@ -30,10 +31,17 @@ class JobsController < ApplicationController
     @job = Job.find(params[:id])
 
     if @job.update(job_params)
-      redirect_to jobs_path
+      redirect_to jobs_path, notice: "Update Success!"
     else
       render :edit
     end
+  end
+
+  def destroy
+    @job = Job.find(params[:id])
+
+    @job.destroy
+    redirect_to jobs_path , notice: "Delete Success!"
   end
 
   private
